@@ -1,18 +1,25 @@
 <script setup>
 import { getCategoryAPI } from '@/apis/category';
-import { useRoute } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { ref, onMounted } from 'vue';
 import { getBannerAPI } from '@/apis/home';
 import GoodsItem from '../Home/components/GoodsItem.vue';
 
 const categoryData = ref({})
 const route = useRoute()
-const getCategory = async () => {
-    const res = await getCategoryAPI(route.params.id)
+//未传id则用默认参数
+const getCategory = async (id = route.params.id) => {
+    const res = await getCategoryAPI(id)
     categoryData.value = res.result
 }
 
 onMounted(() => getCategory())
+
+onBeforeRouteUpdate((to) => {
+  getCategory(to.params.id)
+})
+
+//need to update category when category change
 
 //get banner
 const bannerList = ref([])

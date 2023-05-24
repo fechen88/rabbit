@@ -20,6 +20,8 @@
     <LayoutNav />
     <LayoutHeader />
     <!-- 2nd tier router -->
+    <!-- 解决router缓存方法1 -->
+    <!-- <RouterView :key="$route.fullPath"/> -->
     <RouterView />
     <LayoutFooter />
 </template>
