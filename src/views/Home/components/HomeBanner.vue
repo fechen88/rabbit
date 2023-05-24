@@ -1,0 +1,3 @@
+<template>
+    banner page
+</template>
