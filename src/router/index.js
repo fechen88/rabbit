@@ -33,7 +33,13 @@ const router = createRouter({
       path: '/login',
       component: Login
     }
-  ]
+  ],
+  //add router scroll behavior
+  scrollBehavior(){
+    return {
+      top: 0
+    }
+  }
 })
 
 export default router
