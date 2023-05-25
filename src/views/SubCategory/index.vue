@@ -1,15 +1,34 @@
 <script setup>
-import { getCategoryFilterAPI } from '@/apis/category';
+import { getCategoryFilterAPI, getSubCategoryAPI } from '@/apis/category';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import GoodsItem from '../Home/components/GoodsItem.vue';
 
+//get bread crumbs data
 const categoryData = ref([])
+const route = useRoute()
 const getCategoryData = async() => {
-    const route = useRoute()
     const res = await getCategoryFilterAPI(route.params.id)
+    console.log(res)
     categoryData.value = res.result
 }
 onMounted(() => getCategoryData())
+
+//get subcategory data
+const goodList = ref([])
+const reqData = ref({
+    categoryId: route.params.id,
+    page: 1,
+    pageSize: 20,
+    sortField: 'publishTime'
+})
+const getGoodList = async() => {
+    const res = await getSubCategoryAPI(reqData.value)
+    goodList.value = res.result.items
+}
+
+onMounted(() => getGoodList())
+
 </script>
 
 <template>
@@ -30,7 +49,7 @@ onMounted(() => getCategoryData())
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
       <div class="body">
-         <!-- 商品列表-->
+         <GoodsItem v-for="good in goodList" :good="good"/>
       </div>
     </div>
   </div>
