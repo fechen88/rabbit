@@ -29,9 +29,21 @@ const getGoodList = async() => {
 
 onMounted(() => getGoodList())
 
+//tab change
 const tabChange = () => {
     reqData.value.page = 1
     getGoodList()
+}
+
+//infite scroll
+const infScrollDisabled = ref(false)
+const load = async() => {
+    reqData.value.page++
+    const res = await getSubCategoryAPI(reqData.value)
+    goodList.value = [...goodList.value,...res.result.items]
+    if (res.result.items.length === 0){
+        infScrollDisabled.value = true
+    }
 }
 
 </script>
@@ -53,7 +65,7 @@ const tabChange = () => {
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="load" :infinite-scroll-disabbled="infScrollDisabled">
          <GoodsItem v-for="good in goodList" :good="good"/>
       </div>
     </div>
