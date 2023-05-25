@@ -2,18 +2,16 @@
 import { getItemDetailAPI } from '@/apis/detail';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import DetailHot from './components/DetailHot.vue'; 
 
 const item = ref({})
 const route = useRoute()
 const getItem = async() => {
     const res = await getItemDetailAPI(route.params.id)
     item.value = res.result
-    console.log(item.value.categories)
 }
 
 onMounted(()=>getItem())
-
-//get
 
 </script>
 
@@ -120,7 +118,10 @@ onMounted(()=>getItem())
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+                <!-- 24小时热榜 -->
+                <DetailHot :hot-type="1"/>
+                <!-- 周热榜 -->
+                <DetailHot :hot-type="2"/>
             </div>
           </div>
         </div>
