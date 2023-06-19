@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 
 const httpInstance = axios.create({
     baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
@@ -29,6 +30,15 @@ httpInstance.interceptors.response.use(response => response.data, error => {
     type: 'warning',
     message: error.response.data.message
   })
+  //401 token expire handle
+  //1.清除本地数据
+  //2.跳转登录页
+  const userStore = useUserStore()
+  if (error.response.status === 401){
+    userStore.clearUserInfo()
+    router.push('/login')
+  }
+
   return Promise.reject(error)
 });
 
